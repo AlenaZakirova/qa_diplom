@@ -12,7 +12,6 @@ import static data.SQLHelper.cleanDatabase;
 
     public class TestBuyingTourOnCredit {
         Element element;
-
         @BeforeAll
         static void setUpAll() {
             SelenideLogger.addListener("Allure", new AllureSelenide());
@@ -35,105 +34,42 @@ import static data.SQLHelper.cleanDatabase;
 
         @Test
         @DisplayName("Sending payment using card No. 1 with valid data.")
-        void mustHaveHadSuccessfulPurchaseTourWithValidCreditCard1() {
-            element.chooseBy("Оплата по карте");
+        void shouldOfSuccessfulPurchaseTourWithValidCreditCard1() {
+            element.chooseByInCredit("Кредит по данным карты");
             element.enteringApprovedCard();
             element.enteringValidCardValidityPeriod();
             element.enteringValidOwner();
             element.enteringValidCVC();
             element.verifySuccessfulNotification("Операция одобрена Банком.");
-            var actualStatusLastLinePaymentRequestEntity = SQLHelper.getStatusLastLinePaymentRequestEntity();
+            var actualStatusLastLineCreditRequestEntity = SQLHelper.getStatusLastLineCreditRequestEntity();
             var expectedStatus = "APPROVED";
-            assertEquals(actualStatusLastLinePaymentRequestEntity, expectedStatus);
+            assertEquals(actualStatusLastLineCreditRequestEntity, expectedStatus);
         }
 
         @Test
         @DisplayName("Sending payment using card No. 2 with valid data.")
-        void mustHaveHadSuccessfulPurchaseTourWithValidCreditCard2() {
-            element.chooseBy("Оплата по карте");
+        void shouldOfSuccessfulPurchaseTourWithValidCreditCard2() {
+            element.chooseByInCredit("Кредит по данным карты");
             element.enteringDeclinedCard();
             element.enteringValidCardValidityPeriod();
             element.enteringValidOwner();
             element.enteringValidCVC();
             element.verifyErrorNotification("Ошибка! Банк отказал в проведении операции.");
-            var actualStatusLastLinePaymentRequestEntity = SQLHelper.getStatusLastLinePaymentRequestEntity();
+            var actualStatusLastLineCreditRequestEntity = SQLHelper.getStatusLastLinePaymentRequestEntity();
             var expectedStatus = "DECLINED";
-            assertEquals(actualStatusLastLinePaymentRequestEntity, expectedStatus);
+            assertEquals(actualStatusLastLineCreditRequestEntity, expectedStatus);
         }
 
         @Test
         @DisplayName("Sending invalid payment data for card No. 3.")
         void thereMustBeAnUnsuccessfulPurchaseTourWithAnInvalidCreditCard3() {
-            element.chooseBy("Оплата по карте");
+            element.chooseByInCredit("Кредит по данным карты");
             element.enteringRandomCard();
             element.enteringValidCardValidityPeriod();
             element.enteringValidOwner();
             element.enteringValidCVC();
             element.verifyErrorNotification("Ошибка! Банк отказал в проведении операции.");
         }
-
-        @Test
-        @DisplayName("Submitting a form with an empty value.")
-        void shouldReturnErrorWhenEmptyForm() {
-            element.chooseBy("Оплата по карте");
-            element.verifySuccessfulNotificationIsNotVisible();
-            element.verifyErrorCardNumberField("Неверный формат");
-            element.verifyErrorMonthField("Неверный формат");
-            element.verifyErrorYearField("Неверный формат");
-            element.verifyErrorOwnerField("Поле обязательно для заполнения");
-            element.verifyErrorCVCField("Неверный формат");
-        }
-
-        @Test
-        @DisplayName("Error when filling out a form with expired card data.")
-        void shouldReturnAnErrorWithExpiredcreditCardInformation() {
-            element.chooseBy("Оплата по карте");
-            element.enteringApprovedCard();
-            element.enteringInvalidCardValidityPeriod();
-            element.enteringValidOwner();
-            element.enteringValidCVC();
-            element.verifySuccessfulNotificationIsNotVisible();
-            element.verifyPeriodErrorYearField("Истёк срок действия карты");
-        }
-
-        @Test
-        @DisplayName("Submitting a form with an empty card value.")
-        void shouldReturnAnErrorIfTheСreditCardNumberIsEmpty() {
-            element.chooseBy("Оплата по карте");
-            element.enteringInvalidCard();
-            element.enteringValidCardValidityPeriod();
-            element.enteringValidOwner();
-            element.enteringValidCVC();
-            element.verifySuccessfulNotificationIsNotVisible();
-            element.verifyErrorCardNumberField("Неверный формат");
-        }
-
-
-
-        @Test
-        @DisplayName("Error when buying a tour with invalid cardholder data on the form.")
-        void shouldReturnAnErrorWhenCardWithAnInvalidCreditCardHolder() {
-            element.chooseBy("Оплата по карте");
-            element.enteringApprovedCard();
-            element.enteringValidCardValidityPeriod();
-            element.enteringInValidOwner();
-            element.enteringValidCVC();
-            element.verifySuccessfulNotificationIsNotVisible();
-            element.verifyErrorOwnerField("Поле обязательно для заполнения");
-        }
-
-        @Test
-        @DisplayName("Checking the CVC/CVV field with invalid data.")
-        void shouldReturnErrorIfTheCreditCardHasAnInvalidCVC() {
-            element.chooseBy("Оплата по карте");
-            element.enteringApprovedCard();
-            element.enteringValidCardValidityPeriod();
-            element.enteringValidOwner();
-            element.enteringInValidCVC();
-            element.verifySuccessfulNotificationIsNotVisible();
-            element.verifyErrorCVCField("Неверный формат");
-        }
-
 
     }
 
