@@ -1,14 +1,14 @@
-package test;
+package ru.netology.data.test;
 
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
-import data.SQLHelper;
-import page.Element;
+import ru.netology.data.SQLHelper;
+import ru.netology.data.page.Element;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static data.SQLHelper.cleanDatabase;
+import static ru.netology.data.SQLHelper.cleanDatabase;
 
     public class TestBuyingTourOnCredit {
         Element element;
